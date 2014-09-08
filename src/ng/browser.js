@@ -154,12 +154,17 @@ function Browser(window, document, $log, $sniffer) {
     if (url) {
       if (lastBrowserUrl == url) return;
       lastBrowserUrl = url;
+      newLocation = url;
       if ($sniffer.history) {
-        if (replace) history.replaceState(null, '', url);
-        else {
-          history.pushState(null, '', url);
-          // Crazy Opera Bug: http://my.opera.com/community/forums/topic.dml?id=1185462
-          baseElement.attr('href', baseElement.attr('href'));
+        try {
+          if (replace) history.replaceState(null, '', url);
+          else {
+            history.pushState(null, '', url);
+            // Crazy Opera Bug: http://my.opera.com/community/forums/topic.dml?id=1185462
+            baseElement.attr('href', baseElement.attr('href'));
+          }
+        } catch (e) {
+          // just catch
         }
       } else {
         newLocation = url;
